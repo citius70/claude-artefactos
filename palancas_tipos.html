@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de palancas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      background: #ffffff;
+      color: #2C2C2A;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 1.5rem;
+      color: #2C2C2A;
+    }
+    .lever-section { margin: 0 0 2.5rem; }
+    .lever-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: #2C2C2A;
+      margin: 0 0 6px;
+    }
+    canvas {
+      width: 100%;
+      display: block;
+      cursor: grab;
+    }
+    canvas:active { cursor: grabbing; }
+  </style>
+</head>
+<body>
+
+<h1>Simulador interactivo de palancas</h1>
+
+<div class="lever-section">
+  <div class="lever-label">Palanca de 1º grado: Fulcro entre F y R</div>
+  <canvas id="c1"></canvas>
+</div>
+<div class="lever-section">
+  <div class="lever-label">Palanca de 2º grado: R entre fulcro y F</div>
+  <canvas id="c2"></canvas>
+</div>
+<div class="lever-section">
+  <div class="lever-label">Palanca de 3º grado: F entre fulcro y R</div>
+  <canvas id="c3"></canvas>
+</div>
+
+<script>
+const levers = [
+  {
+    id:'c1', H:150,
+    getFulcrum: s => s.fulcrumPos, getF: () => 0, getR: () => 1,
+    movable:'fulcrum', fulcrumPos:0.5, min:0.08, max:0.92,
+    barY: 55,
+    arms: [ {side:'bF', below:24}, {side:'bR', below:24} ],
+    arrows: {
+      F: {dir:'down', len:38, colorKey:'bF'},
+      R: {dir:'down', len:38, colorKey:'R'}
+    }
+  },
+  {
+    id:'c2', H:165,
+    getFulcrum: () => 0, getF: () => 1, getR: s => s.rPos,
+    movable:'r', rPos:0.5, min:0.08, max:0.92,
+    barY: 95,
+    arms: [ {side:'bF', above:55}, {side:'bR', below:24} ],
+    arrows: {
+      F: {dir:'up', len:30, colorKey:'bF'},
+      R: {dir:'down', len:50, colorKey:'R'}
+    }
+  },
+  {
+    id:'c3', H:155,
+    getFulcrum: () => 0, getF: s => s.fPos, getR: () => 1,
+    movable:'f', fPos:0.5, min:0.08, max:0.92,
+    barY: 85,
+    arms: [ {side:'bF', above:55}, {side:'bR', below:24} ],
+    arrows: {
+      F: {dir:'up', len:50, colorKey:'bF'},
+      R: {dir:'down', len:30, colorKey:'R'}
+    }
+  }
+];
+
+const C = {
+  bar:     '#888780',
+  fulcrum: '#185FA5',
+  bF:      '#185FA5',
+  R:       '#993C1D',
+  bR:      '#BA7517',
+};
+
+function drawSpan(ctx, left, right, y, color, label, above) {
+  if (left >= right) return;
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(left, y); ctx.lineTo(right, y);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(left,  y-4); ctx.lineTo(left,  y+4);
+  ctx.moveTo(right, y-4); ctx.lineTo(right, y+4);
+  ctx.stroke();
+  ctx.fillStyle = color;
+  ctx.font = '12px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, (left+right)/2, above ? y-6 : y+14);
+}
+
+function drawArrow(ctx, ax, barY, cfg, color, label) {
+  const len = cfg.len;
+  const up = cfg.dir === 'up';
+  const yTip  = up ? barY - len : barY + len;
+  const yCap  = up ? yTip + 10  : yTip - 10;
+
+  ctx.strokeStyle = color; ctx.fillStyle = color;
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.moveTo(ax, barY);
+  ctx.lineTo(ax, yCap);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(ax, yTip);
+  ctx.lineTo(ax - 6, yCap);
+  ctx.lineTo(ax + 6, yCap);
+  ctx.closePath();
+  ctx.fill();
+  ctx.font = 'bold 13px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(label, ax, up ? yTip - 6 : yTip + 14);
+}
+
+function drawLever(state) {
+  const canvas = document.getElementById(state.id);
+  const W = canvas.offsetWidth || 700;
+  const H = state.H;
+  canvas.width  = W * devicePixelRatio;
+  canvas.height = H * devicePixelRatio;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.clearRect(0, 0, W, H);
+
+  const pad = 8;
+  const x0 = pad, x1 = W - pad;
+  const span = x1 - x0;
+  const barY = state.barY;
+
+  const px = f => x0 + f * span;
+  const fulX = px(state.getFulcrum(state));
+  const fX   = px(state.getF(state));
+  const rX   = px(state.getR(state));
+
+  const bf = Math.abs(fulX - fX);
+  const br = Math.abs(rX - fulX);
+  const bfCm = Math.round(bf / span * 100);
+  const brCm = Math.round(br / span * 100);
+
+  // Barra
+  ctx.strokeStyle = C.bar;
+  ctx.lineWidth = 5;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(x0, barY); ctx.lineTo(x1, barY);
+  ctx.stroke();
+
+  // Brazos
+  const bFLeft  = Math.min(fX, fulX), bFRight = Math.max(fX, fulX);
+  const bRLeft  = Math.min(rX, fulX), bRRight = Math.max(rX, fulX);
+
+  state.arms.forEach(arm => {
+    const isF   = arm.side === 'bF';
+    const left  = isF ? bFLeft  : bRLeft;
+    const right = isF ? bFRight : bRRight;
+    const color = isF ? C.bF : C.bR;
+    const val   = isF ? bfCm : brCm;
+    const label = arm.side + ' = ' + val + ' cm';
+    if (arm.above !== undefined) {
+      drawSpan(ctx, left, right, barY - arm.above, color, label, true);
+    } else {
+      drawSpan(ctx, left, right, barY + arm.below, color, label, false);
+    }
+  });
+
+  // Fulcro
+  const tH = 20, tW = 20;
+  ctx.fillStyle = C.fulcrum;
+  ctx.beginPath();
+  ctx.moveTo(fulX, barY + 3);
+  ctx.lineTo(fulX - tW/2, barY + tH);
+  ctx.lineTo(fulX + tW/2, barY + tH);
+  ctx.closePath();
+  ctx.fill();
+
+  // Flechas
+  const Fcfg = state.arrows.F;
+  const Rcfg = state.arrows.R;
+  drawArrow(ctx, fX, barY, Fcfg, C[Fcfg.colorKey], 'F');
+  drawArrow(ctx, rX, barY, Rcfg, C[Rcfg.colorKey], 'R');
+}
+
+function getPos(state, canvas, clientX) {
+  const rect = canvas.getBoundingClientRect();
+  const W = canvas.offsetWidth;
+  const pad = 8;
+  return (clientX - rect.left - pad) / (W - pad*2);
+}
+
+levers.forEach(state => {
+  const canvas = document.getElementById(state.id);
+  let dragging = false;
+  function draw() { drawLever(state); }
+  draw();
+  function move(clientX) {
+    if (!dragging) return;
+    const p = Math.max(state.min, Math.min(state.max, getPos(state, canvas, clientX)));
+    if (state.movable === 'fulcrum') state.fulcrumPos = p;
+    else if (state.movable === 'r') state.rPos = p;
+    else if (state.movable === 'f') state.fPos = p;
+    draw();
+  }
+  canvas.addEventListener('mousedown', e => { dragging=true; move(e.clientX); });
+  window.addEventListener('mousemove', e => move(e.clientX));
+  window.addEventListener('mouseup', () => dragging=false);
+  canvas.addEventListener('touchstart', e => { e.preventDefault(); dragging=true; move(e.touches[0].clientX); }, {passive:false});
+  canvas.addEventListener('touchmove',  e => { e.preventDefault(); move(e.touches[0].clientX); }, {passive:false});
+  canvas.addEventListener('touchend',   () => dragging=false);
+  window.addEventListener('resize', draw);
+});
+</script>
+</body>
+</html>
