@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Palanca de primer grado</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; font-size: 15px; background: #fff; color: #333; padding: 16px; }
+
+  .controls { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+  .row { display: flex; align-items: center; gap: 10px; }
+  .row label { white-space: nowrap; min-width: 210px; }
+  .row input[type=range] { flex: 1; }
+
+  .formula-box {
+    background: #f5f7fa;
+    border: 1px solid #d0d8e8;
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  .ley { font-size: 21px; margin-bottom: 12px; letter-spacing: 0.5px; }
+  .expr { display: inline-flex; align-items: center; gap: 12px; font-size: 20px; }
+  .frac { display: inline-flex; flex-direction: column; align-items: center; gap: 1px; }
+  .frac-line { height: 2px; background: #333; width: 100%; }
+  .frac span { padding: 0 10px; }
+
+  .azul  { color: #185FA5; font-weight: 600; }
+  .granate { color: #993C1D; font-weight: 600; }
+  .negro { color: #333; }
+
+  svg { width: 100%; display: block; margin: 4px 0; }
+
+  .cards { display: flex; gap: 10px; margin-top: 10px; }
+  .card { flex: 1; background: #f5f7fa; border: 1px solid #d0d8e8; border-radius: 6px; padding: 8px; text-align: center; }
+  .card-label { font-size: 11px; color: #666; margin-bottom: 4px; }
+  .card-val { font-size: 21px; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <div class="row">
+    <label>Resistencia (R): <strong id="rVal">100</strong> N</label>
+    <input type="range" min="10" max="200" value="100" step="10" id="rSlider">
+  </div>
+  <div class="row">
+    <label>Posición del fulcro: <strong id="fulcroPos">300</strong> cm</label>
+    <input type="range" min="10" max="590" value="300" step="10" id="fulcroSlider">
+  </div>
+</div>
+
+<div class="formula-box">
+  <div class="ley">
+    <span class="azul">F</span> <span class="negro"> · </span> <span class="azul">b<sub>F</sub></span>
+    <span class="negro"> = </span>
+    <span class="granate">R</span> <span class="negro"> · </span> <span class="granate">b<sub>R</sub></span>
+  </div>
+  <div class="expr">
+    <span class="azul">F</span>
+    <span class="negro">=</span>
+    <div class="frac">
+      <span><span class="granate">R</span> <span class="negro"> · </span> <span class="granate">b<sub>R</sub></span></span>
+      <div class="frac-line"></div>
+      <span class="azul">b<sub>F</sub></span>
+    </div>
+    <span class="negro">=</span>
+    <div class="frac">
+      <span id="fracNum" class="granate">100 N · 300 cm</span>
+      <div class="frac-line"></div>
+      <span id="fracDen" class="azul">300 cm</span>
+    </div>
+    <span class="negro">=</span>
+    <span id="fracRes" class="azul" style="font-size:24px;">100 N</span>
+  </div>
+</div>
+
+<svg viewBox="0 0 660 185" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="aF" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#185FA5"/>
+    </marker>
+    <marker id="aR" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#993C1D"/>
+    </marker>
+  </defs>
+
+  <!-- Brazos -->
+  <line id="barF" x1="40" y1="90" x2="330" y2="90" stroke="#185FA5" stroke-width="10" stroke-linecap="round"/>
+  <line id="barR" x1="330" y1="90" x2="620" y2="90" stroke="#993C1D" stroke-width="10" stroke-linecap="round"/>
+
+  <!-- Fulcro -->
+  <polygon id="fulcrum" points="330,100 310,140 350,140" fill="#BA7517" stroke="#8a5500" stroke-width="1"/>
+  <line id="fulcrum-base" x1="305" y1="142" x2="355" y2="142" stroke="#8a5500" stroke-width="3"/>
+
+  <!-- Flecha F -->
+  <line x1="40" y1="45" x2="40" y2="83" stroke="#185FA5" stroke-width="2.5" marker-end="url(#aF)"/>
+  <text id="lblF" x="40" y="38" text-anchor="middle" font-size="13" fill="#185FA5" font-family="Arial">F = 100 N</text>
+
+  <!-- Flecha R -->
+  <line x1="620" y1="45" x2="620" y2="83" stroke="#993C1D" stroke-width="2.5" marker-end="url(#aR)"/>
+  <text id="lblR" x="620" y="38" text-anchor="middle" font-size="13" fill="#993C1D" font-family="Arial">R = 100 N</text>
+
+  <!-- Brazo F -->
+  <line id="bFline" x1="40" y1="78" x2="330" y2="78" stroke="#185FA5" stroke-width="1" stroke-dasharray="4,3"/>
+  <text id="bFlabel" x="185" y="72" text-anchor="middle" font-size="12" fill="#185FA5" font-family="Arial">bF = 300 cm</text>
+
+  <!-- Brazo R -->
+  <line id="bRline" x1="330" y1="78" x2="620" y2="78" stroke="#993C1D" stroke-width="1" stroke-dasharray="4,3"/>
+  <text id="bRlabel" x="475" y="72" text-anchor="middle" font-size="12" fill="#993C1D" font-family="Arial">bR = 300 cm</text>
+</svg>
+
+<div class="cards">
+  <div class="card">
+    <div class="card-label">Brazo de fuerza (b<sub>F</sub>)</div>
+    <div class="card-val" id="cardBF" style="color:#185FA5;">300 cm</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Brazo de resistencia (b<sub>R</sub>)</div>
+    <div class="card-val" id="cardBR" style="color:#993C1D;">300 cm</div>
+  </div>
+  <div class="card">
+    <div class="card-label">Fuerza motriz (F)</div>
+    <div class="card-val" id="cardF" style="color:#185FA5;">100 N</div>
+  </div>
+</div>
+
+<script>
+const FX=40, RX=620, BY=90, TPX=580, TCM=600;
+const fSl = document.getElementById('fulcroSlider');
+const rSl = document.getElementById('rSlider');
+
+function fmt(v) {
+  if (!isFinite(v)) return '∞';
+  return Number.isInteger(v) ? v + ' N' : v.toFixed(2) + ' N';
+}
+
+function upd() {
+  const bF = parseInt(fSl.value);
+  const bR = TCM - bF;
+  const R  = parseInt(rSl.value);
+  const F  = bF > 0 ? (R * bR / bF) : Infinity;
+  const fx = FX + (bF / TCM) * TPX;
+
+  document.getElementById('rVal').textContent = R;
+  document.getElementById('fulcroPos').textContent = bF;
+  document.getElementById('lblR').textContent = 'R = ' + R + ' N';
+  document.getElementById('lblF').textContent = 'F = ' + fmt(F);
+
+  document.getElementById('barF').setAttribute('x2', fx);
+  document.getElementById('barR').setAttribute('x1', fx);
+
+  document.getElementById('fulcrum').setAttribute('points',
+    `${fx},${BY+10} ${fx-20},${BY+50} ${fx+20},${BY+50}`);
+  document.getElementById('fulcrum-base').setAttribute('x1', fx-25);
+  document.getElementById('fulcrum-base').setAttribute('x2', fx+25);
+  document.getElementById('fulcrum-base').setAttribute('y1', BY+52);
+  document.getElementById('fulcrum-base').setAttribute('y2', BY+52);
+
+  document.getElementById('bFline').setAttribute('x2', fx);
+  document.getElementById('bFline').setAttribute('y1', BY-12);
+  document.getElementById('bFline').setAttribute('y2', BY-12);
+  document.getElementById('bFlabel').setAttribute('x', (FX+fx)/2);
+  document.getElementById('bFlabel').textContent = 'bF = ' + bF + ' cm';
+
+  document.getElementById('bRline').setAttribute('x1', fx);
+  document.getElementById('bRline').setAttribute('y1', BY-12);
+  document.getElementById('bRline').setAttribute('y2', BY-12);
+  document.getElementById('bRlabel').setAttribute('x', (fx+RX)/2);
+  document.getElementById('bRlabel').textContent = 'bR = ' + bR + ' cm';
+
+  document.getElementById('fracNum').textContent = R + ' N · ' + bR + ' cm';
+  document.getElementById('fracDen').textContent = bF + ' cm';
+  document.getElementById('fracRes').textContent = fmt(F);
+
+  document.getElementById('cardBF').textContent = bF + ' cm';
+  document.getElementById('cardBR').textContent = bR + ' cm';
+  document.getElementById('cardF').textContent  = fmt(F);
+}
+
+fSl.addEventListener('input', upd);
+rSl.addEventListener('input', upd);
+upd();
+</script>
+</body>
+</html>
