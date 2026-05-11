@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polipasto</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      background: #fff;
+      color: #222;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 360px;
+      margin-bottom: 12px;
+    }
+    .controls label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #7a1a1a;
+      min-width: 30px;
+    }
+    .controls input[type=range] {
+      flex: 1;
+      accent-color: #7a1a1a;
+    }
+    .controls span {
+      font-size: 15px;
+      font-weight: 600;
+      color: #7a1a1a;
+      min-width: 60px;
+    }
+    svg {
+      max-width: 620px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="controls">
+    <label>R</label>
+    <input type="range" id="slider" min="40" max="800" value="120" step="4">
+    <span id="rval">120 N</span>
+  </div>
+
+  <svg viewBox="0 0 680 860" role="img" xmlns="http://www.w3.org/2000/svg">
+    <title>Polipasto</title>
+    <defs>
+      <marker id="arr-blue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#185FA5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <marker id="arr-red" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+        <path d="M2 1L8 5L2 9" fill="none" stroke="#7a1a1a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </marker>
+      <linearGradient id="ruedaGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#d0d0d0"/>
+        <stop offset="50%"  stop-color="#909090"/>
+        <stop offset="100%" stop-color="#505050"/>
+      </linearGradient>
+      <linearGradient id="metalGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%"   stop-color="#aaaaaa"/>
+        <stop offset="50%"  stop-color="#e0e0e0"/>
+        <stop offset="100%" stop-color="#888888"/>
+      </linearGradient>
+      <linearGradient id="bloqueGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%"   stop-color="#c0392b"/>
+        <stop offset="100%" stop-color="#6b1010"/>
+      </linearGradient>
+    </defs>
+
+    <!-- TECHO -->
+    <rect x="120" y="28" width="430" height="13" rx="2" fill="#777" stroke="#555" stroke-width="1"/>
+    <line x1="124" y1="28" x2="112" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="137" y1="28" x2="125" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="150" y1="28" x2="138" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="163" y1="28" x2="151" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="176" y1="28" x2="164" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="189" y1="28" x2="177" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="202" y1="28" x2="190" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="215" y1="28" x2="203" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="228" y1="28" x2="216" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="241" y1="28" x2="229" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="254" y1="28" x2="242" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="267" y1="28" x2="255" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="280" y1="28" x2="268" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="293" y1="28" x2="281" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="306" y1="28" x2="294" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="319" y1="28" x2="307" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="332" y1="28" x2="320" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="345" y1="28" x2="333" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="358" y1="28" x2="346" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="371" y1="28" x2="359" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="384" y1="28" x2="372" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="397" y1="28" x2="385" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="410" y1="28" x2="398" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="423" y1="28" x2="411" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="436" y1="28" x2="424" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="449" y1="28" x2="437" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+    <line x1="540" y1="28" x2="528" y2="16" stroke="#555" stroke-width="1.2" opacity="0.5"/>
+
+    <!-- Anclaje cuerda izquierda y vástagos poleas fijas -->
+    <rect x="130" y="33" width="8" height="12" rx="2" fill="url(#metalGrad)" stroke="#777" stroke-width="0.8"/>
+    <rect x="226" y="41" width="8" height="45" rx="3" fill="url(#metalGrad)" stroke="#777" stroke-width="1"/>
+    <rect x="386" y="41" width="8" height="45" rx="3" fill="url(#metalGrad)" stroke="#777" stroke-width="1"/>
+
+    <!-- CUERDAS -->
+    <!-- Seg 1: vertical izq, tangente izq PM1, x=134 -->
+    <rect x="130" y="41" width="8" height="319" rx="4" fill="#a07830"/>
+    <rect x="131" y="41" width="3" height="319" rx="2" fill="#d4a94a" opacity="0.5"/>
+    <!-- Seg 2: tang der PM1 → tang izq PF1 -->
+    <line x1="186" y1="360" x2="204" y2="120" stroke="#a07830" stroke-width="8" stroke-linecap="round"/>
+    <line x1="186" y1="360" x2="204" y2="120" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <!-- Seg 3: tang der PF1 → tang izq PM2 -->
+    <line x1="256" y1="120" x2="294" y2="360" stroke="#a07830" stroke-width="8" stroke-linecap="round"/>
+    <line x1="256" y1="120" x2="294" y2="360" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <!-- Seg 4: tang der PM2 → tang izq PF2 -->
+    <line x1="346" y1="360" x2="364" y2="120" stroke="#a07830" stroke-width="8" stroke-linecap="round"/>
+    <line x1="346" y1="360" x2="364" y2="120" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+    <!-- Seg 5: tang der PF2 → diagonal F -->
+    <line x1="416" y1="120" x2="550" y2="430" stroke="#a07830" stroke-width="8" stroke-linecap="round"/>
+    <line x1="416" y1="120" x2="550" y2="430" stroke="#d4a94a" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+
+    <!-- POLEA FIJA 1: cx=230 cy=120 r=34 -->
+    <circle cx="230" cy="120" r="34" fill="url(#ruedaGrad)" stroke="#444" stroke-width="2"/>
+    <circle cx="230" cy="120" r="26" fill="none" stroke="#333" stroke-width="5"/>
+    <circle cx="230" cy="120" r="26" fill="none" stroke="#999" stroke-width="2"/>
+    <line x1="230" y1="86"  x2="230" y2="154" stroke="#666" stroke-width="2"/>
+    <line x1="196" y1="120" x2="264" y2="120" stroke="#666" stroke-width="2"/>
+    <line x1="206" y1="96"  x2="254" y2="144" stroke="#666" stroke-width="1.5"/>
+    <line x1="254" y1="96"  x2="206" y2="144" stroke="#666" stroke-width="1.5"/>
+    <circle cx="230" cy="120" r="10" fill="#ccc" stroke="#555" stroke-width="1.5"/>
+    <circle cx="230" cy="120" r="4"  fill="#666" stroke="#444" stroke-width="1"/>
+
+    <!-- POLEA FIJA 2: cx=390 cy=120 r=34 -->
+    <circle cx="390" cy="120" r="34" fill="url(#ruedaGrad)" stroke="#444" stroke-width="2"/>
+    <circle cx="390" cy="120" r="26" fill="none" stroke="#333" stroke-width="5"/>
+    <circle cx="390" cy="120" r="26" fill="none" stroke="#999" stroke-width="2"/>
+    <line x1="390" y1="86"  x2="390" y2="154" stroke="#666" stroke-width="2"/>
+    <line x1="356" y1="120" x2="424" y2="120" stroke="#666" stroke-width="2"/>
+    <line x1="366" y1="96"  x2="414" y2="144" stroke="#666" stroke-width="1.5"/>
+    <line x1="414" y1="96"  x2="366" y2="144" stroke="#666" stroke-width="1.5"/>
+    <circle cx="390" cy="120" r="10" fill="#ccc" stroke="#555" stroke-width="1.5"/>
+    <circle cx="390" cy="120" r="4"  fill="#666" stroke="#444" stroke-width="1"/>
+
+    <!-- POLEA MÓVIL 1: cx=160 cy=360 r=34 -->
+    <circle cx="160" cy="360" r="34" fill="url(#ruedaGrad)" stroke="#444" stroke-width="2"/>
+    <circle cx="160" cy="360" r="26" fill="none" stroke="#333" stroke-width="5"/>
+    <circle cx="160" cy="360" r="26" fill="none" stroke="#999" stroke-width="2"/>
+    <line x1="160" y1="326" x2="160" y2="394" stroke="#666" stroke-width="2"/>
+    <line x1="126" y1="360" x2="194" y2="360" stroke="#666" stroke-width="2"/>
+    <line x1="136" y1="336" x2="184" y2="384" stroke="#666" stroke-width="1.5"/>
+    <line x1="184" y1="336" x2="136" y2="384" stroke="#666" stroke-width="1.5"/>
+    <circle cx="160" cy="360" r="10" fill="#ccc" stroke="#555" stroke-width="1.5"/>
+    <circle cx="160" cy="360" r="4"  fill="#666" stroke="#444" stroke-width="1"/>
+
+    <!-- POLEA MÓVIL 2: cx=320 cy=360 r=34 -->
+    <circle cx="320" cy="360" r="34" fill="url(#ruedaGrad)" stroke="#444" stroke-width="2"/>
+    <circle cx="320" cy="360" r="26" fill="none" stroke="#333" stroke-width="5"/>
+    <circle cx="320" cy="360" r="26" fill="none" stroke="#999" stroke-width="2"/>
+    <line x1="320" y1="326" x2="320" y2="394" stroke="#666" stroke-width="2"/>
+    <line x1="286" y1="360" x2="354" y2="360" stroke="#666" stroke-width="2"/>
+    <line x1="296" y1="336" x2="344" y2="384" stroke="#666" stroke-width="1.5"/>
+    <line x1="344" y1="336" x2="296" y2="384" stroke="#666" stroke-width="1.5"/>
+    <circle cx="320" cy="360" r="10" fill="#ccc" stroke="#555" stroke-width="1.5"/>
+    <circle cx="320" cy="360" r="4"  fill="#666" stroke="#444" stroke-width="1"/>
+
+    <!-- Vástagos poleas móviles -->
+    <rect x="156" y="394" width="8" height="20" rx="2" fill="url(#metalGrad)" stroke="#777" stroke-width="0.8"/>
+    <rect x="316" y="394" width="8" height="20" rx="2" fill="url(#metalGrad)" stroke="#777" stroke-width="0.8"/>
+
+    <!-- BLOQUE CARGA -->
+    <rect x="110" y="414" width="260" height="56" rx="8" fill="url(#bloqueGrad)" stroke="#7a1a1a" stroke-width="2"/>
+    <circle cx="128" cy="428" r="4" fill="none" stroke="#c0392b" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="352" cy="428" r="4" fill="none" stroke="#c0392b" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="128" cy="458" r="4" fill="none" stroke="#c0392b" stroke-width="1.2" opacity="0.7"/>
+    <circle cx="352" cy="458" r="4" fill="none" stroke="#c0392b" stroke-width="1.2" opacity="0.7"/>
+
+    <!-- Flecha R: 160px -->
+    <line x1="240" y1="470" x2="240" y2="630" stroke="#7a1a1a" stroke-width="3" marker-end="url(#arr-red)"/>
+    <text id="labelR" x="228" y="558" text-anchor="end"
+          font-family="sans-serif" font-size="17" font-weight="600" fill="#7a1a1a">R = 120 N</text>
+
+    <!-- Flecha F: alineada con cuerda diagonal -->
+    <line x1="550" y1="430" x2="582" y2="503" stroke="#185FA5" stroke-width="3" marker-end="url(#arr-blue)"/>
+    <text id="labelF" x="596" y="475"
+          font-family="sans-serif" font-size="17" font-weight="600" fill="#185FA5">F = 30 N</text>
+
+    <!-- PANEL FÓRMULAS centrado -->
+    <rect x="50" y="655" width="590" height="115" rx="10" fill="none" stroke="#ccc" stroke-width="1"/>
+
+    <!-- F = -->
+    <text x="100" y="718" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="600" fill="#185FA5">F</text>
+    <text x="126" y="718" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="400" fill="#222">=</text>
+
+    <!-- Fracción 1: R / 2·n -->
+    <text x="162" y="700" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="500" fill="#7a1a1a">R</text>
+    <line x1="142" y1="708" x2="182" y2="708" stroke="#222" stroke-width="2"/>
+    <text x="162" y="728" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="500" fill="#222">2·n</text>
+
+    <!-- = -->
+    <text x="208" y="718" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="400" fill="#666">=</text>
+
+    <!-- Fracción 2: valor_R N / 2·2 (dinámica) -->
+    <text id="rNum1" x="252" y="700" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="500" fill="#7a1a1a">120 N</text>
+    <line id="frac1" x1="226" y1="708" x2="278" y2="708" stroke="#222" stroke-width="2"/>
+    <text x="252" y="728" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="500" fill="#222">2·2</text>
+
+    <!-- = -->
+    <text x="304" y="718" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="400" fill="#666">=</text>
+
+    <!-- Fracción 3: valor_R N / 4 (dinámica) -->
+    <text id="rNum2" x="348" y="700" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="500" fill="#7a1a1a">120 N</text>
+    <line id="frac2" x1="322" y1="708" x2="374" y2="708" stroke="#222" stroke-width="2"/>
+    <text x="348" y="728" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="500" fill="#222">4</text>
+
+    <!-- = resultado -->
+    <text x="400" y="718" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="400" fill="#666">=</text>
+    <text id="fNum" x="466" y="718" text-anchor="middle"
+          font-family="sans-serif" font-size="20" font-weight="600" fill="#185FA5">30 N</text>
+  </svg>
+
+  <script>
+    const slider = document.getElementById('slider');
+    const rval   = document.getElementById('rval');
+    const labelR = document.getElementById('labelR');
+    const labelF = document.getElementById('labelF');
+    const rNum1  = document.getElementById('rNum1');
+    const rNum2  = document.getElementById('rNum2');
+    const fNum   = document.getElementById('fNum');
+    const frac1  = document.getElementById('frac1');
+    const frac2  = document.getElementById('frac2');
+
+    slider.addEventListener('input', () => {
+      const R = parseInt(slider.value);
+      const F = R / 4;
+      rval.textContent   = R + ' N';
+      labelR.textContent = 'R = ' + R + ' N';
+      labelF.textContent = 'F = ' + F + ' N';
+      rNum1.textContent  = R + ' N';
+      rNum2.textContent  = R + ' N';
+      fNum.textContent   = F + ' N';
+      const half = R >= 100 ? 28 : R >= 10 ? 22 : 16;
+      frac1.setAttribute('x1', 252 - half); frac1.setAttribute('x2', 252 + half);
+      frac2.setAttribute('x1', 348 - half); frac2.setAttribute('x2', 348 + half);
+    });
+  </script>
+
+</body>
+</html>
